@@ -1,13 +1,12 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.booking.model;
 
 import lombok.Data;
-import ru.practicum.shareit.booking.model.Status;
+
 
 import java.time.LocalDate;
 
 @Data
-public class BookingDto {
-
+public class Booking {
     private Integer id;
     private LocalDate start;
     private LocalDate end;
@@ -15,7 +14,7 @@ public class BookingDto {
     private Integer booker;
     private Status status;
 
-    public BookingDto(Integer id, LocalDate start, LocalDate end, Integer item, Integer booker, Status status) {
+    public Booking(Integer id, LocalDate start, LocalDate end, Integer item, Integer booker, Status status) {
         this.id = id;
         this.start = start;
         this.end = end;
