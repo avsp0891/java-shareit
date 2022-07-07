@@ -57,7 +57,7 @@ public class ItemController {
     public ItemDto change(@PathVariable(value = "id") Integer id,
                           @RequestHeader("X-Sharer-User-Id") Integer userId,
                           @RequestBody Item item) {
-        return itemService.change(userId,id, item);
+        return itemService.change(userId, id, item);
     }
 
 }

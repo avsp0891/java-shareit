@@ -18,7 +18,6 @@ public class InMemoryUserRepository implements UserRepository {
     private final IdGenerator idGenerator = new IdGenerator();
 
 
-
     @Override
     public Map<Integer, User> getRepository() {
         return repository;

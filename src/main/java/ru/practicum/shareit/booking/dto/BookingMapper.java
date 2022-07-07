@@ -17,7 +17,7 @@ public class BookingMapper {
         );
     }
 
-    public static Booking toBooking(@NotNull BookingDto bookingDto){
+    public static Booking toBooking(@NotNull BookingDto bookingDto) {
         return new Booking(
                 bookingDto.getId(),
                 bookingDto.getStart(),

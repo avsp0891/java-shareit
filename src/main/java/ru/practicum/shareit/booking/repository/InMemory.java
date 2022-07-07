@@ -7,6 +7,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 @AllArgsConstructor
 public class InMemory implements BookingRepository {
 

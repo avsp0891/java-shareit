@@ -84,13 +84,13 @@ public class ItemServiceImpl implements ItemService {
         Item oldItem = itemRepository.getRepository().get(itemId);
         item.setId(itemId);
         item.setOwner(oldItem.getOwner());
-        if(item.getName() == null) {
+        if (item.getName() == null) {
             item.setName(oldItem.getName());
         }
-        if(item.getDescription() == null) {
+        if (item.getDescription() == null) {
             item.setDescription(oldItem.getDescription());
         }
-        if(item.getAvailable() == null) {
+        if (item.getAvailable() == null) {
             item.setAvailable(oldItem.getAvailable());
         }
         return ItemMapper.toItemDto(itemRepository.change(item));

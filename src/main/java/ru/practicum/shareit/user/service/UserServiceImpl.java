@@ -16,14 +16,14 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
     @Override
     public List<UserDto> findAll() {
         List<UserDto> list = new ArrayList<>();
-        for (User user: userRepository.findAll()) {
+        for (User user : userRepository.findAll()) {
             list.add(UserMapper.toUserDto(user));
         }
         return list;
@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService{
         validateEmail(user);
         user.setId(id);
         User oldUser = userRepository.getRepository().get(id);
-        if (user.getName() == null){
+        if (user.getName() == null) {
             user.setName(oldUser.getName());
         }
-        if (user.getEmail() == null){
+        if (user.getEmail() == null) {
             user.setEmail(oldUser.getEmail());
         }
         return UserMapper.toUserDto(userRepository.change(user));
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService{
     }
 
     private void validateEmail(User user) {
-        for(User u: userRepository.getRepository().values()) {
+        for (User u : userRepository.getRepository().values()) {
             if (u.getEmail().equals(user.getEmail()) && !u.getId().equals(user.getId())) {
                 log.warn("Дубликат email");
                 throw new UserValidationException("Пользователь с " + user.getEmail() + " уже существует");
