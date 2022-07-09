@@ -1,8 +1,8 @@
 package ru.practicum.shareit.booking.repository;
 
 import lombok.AllArgsConstructor;
-import ru.practicum.shareit.id.IdGenerator;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.id.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
