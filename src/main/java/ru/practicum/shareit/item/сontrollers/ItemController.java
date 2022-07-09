@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.Controllers;
+package ru.practicum.shareit.item.сontrollers;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -48,16 +48,16 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(CREATED)
     public ItemDto add(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                       @Valid @RequestBody Item item) {
-        return itemService.add(userId, item);
+                       @Valid @RequestBody ItemDto itemDto) {
+        return itemService.add(userId, itemDto);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public ItemDto change(@PathVariable(value = "id") Integer id,
                           @RequestHeader("X-Sharer-User-Id") Integer userId,
-                          @RequestBody Item item) {
-        return itemService.change(userId, id, item);
+                          @RequestBody ItemDto itemDto) {
+        return itemService.change(userId, id, itemDto);
     }
 
 }

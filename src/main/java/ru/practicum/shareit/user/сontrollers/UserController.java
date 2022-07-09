@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.сontrollers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +35,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public UserDto add(@Valid @RequestBody User user) {
-        return userService.add(user);
+    public UserDto add(@Valid @RequestBody UserDto userDto) {
+        return userService.add(userDto);
     }
 
     @PatchMapping("/{id}")
-    public UserDto change(@PathVariable(value = "id") Integer id, @RequestBody User user) {
-        log.debug("Изменение нового пользователя : \n{}", user);
-        return userService.change(id, user);
+    public UserDto change(@PathVariable(value = "id") Integer id, @RequestBody UserDto userDto) {
+        log.debug("Изменение пользователя : \n{}", userDto.getId());
+        return userService.change(id, userDto);
     }
 
     @DeleteMapping("/{id}")

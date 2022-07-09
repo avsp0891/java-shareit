@@ -13,9 +13,9 @@ public interface ItemService {
 
     List<ItemDto> search(String text);
 
-    ItemDto add(Integer userId, Item item);
+    ItemDto add(Integer userId, ItemDto itemDto);
 
-    ItemDto change(Integer userId, Integer itemId, Item item);
+    ItemDto change(Integer userId, Integer itemId, ItemDto itemDto);
 
     ItemDto deleteById(Integer userId, Integer id);
 }

@@ -58,17 +58,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto add(Integer userId, Item item) {
+    public ItemDto add(Integer userId, ItemDto itemDto) {
         if (userService.findById(userId) == null) {
             log.warn("Пользователь с идентификатором {} не найден.", userId);
             throw new UserNotFoundException("Пользователь с id " + userId + " не найден");
         }
-        item.setOwner(userId);
-        return ItemMapper.toItemDto(itemRepository.add(item));
+        itemDto.setOwner(userId);
+        return ItemMapper.toItemDto(itemRepository.add(ItemMapper.toItem(itemDto)));
     }
 
     @Override
-    public ItemDto change(Integer userId, Integer itemId, Item item) {
+    public ItemDto change(Integer userId, Integer itemId, ItemDto itemDto) {
         if (userService.findById(userId) == null) {
             log.warn("Пользователь с идентификатором {} не найден.", userId);
             throw new UserNotFoundException("Пользователь с id " + userId + " не найден");
@@ -81,19 +81,19 @@ public class ItemServiceImpl implements ItemService {
             log.warn("Редактирование вещи с id {} пользователем с id {}", itemId, userId);
             throw new AccessIsDeniedException("Недостаточно прав для выполнения операции.");
         }
-        Item oldItem = itemRepository.getRepository().get(itemId);
-        item.setId(itemId);
-        item.setOwner(oldItem.getOwner());
-        if (item.getName() == null) {
-            item.setName(oldItem.getName());
+        ItemDto oldItem = ItemMapper.toItemDto(itemRepository.getRepository().get(itemId));
+        itemDto.setId(itemId);
+        itemDto.setOwner(oldItem.getOwner());
+        if (itemDto.getName() == null) {
+            itemDto.setName(oldItem.getName());
         }
-        if (item.getDescription() == null) {
-            item.setDescription(oldItem.getDescription());
+        if (itemDto.getDescription() == null) {
+            itemDto.setDescription(oldItem.getDescription());
         }
-        if (item.getAvailable() == null) {
-            item.setAvailable(oldItem.getAvailable());
+        if (itemDto.getAvailable() == null) {
+            itemDto.setAvailable(oldItem.getAvailable());
         }
-        return ItemMapper.toItemDto(itemRepository.change(item));
+        return ItemMapper.toItemDto(itemRepository.change(ItemMapper.toItem(itemDto)));
     }
 
     @Override

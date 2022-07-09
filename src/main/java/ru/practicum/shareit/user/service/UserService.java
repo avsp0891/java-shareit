@@ -11,9 +11,9 @@ public interface UserService {
 
     UserDto findById(Integer id);
 
-    UserDto add(User user);
+    UserDto add(UserDto userDto);
 
-    UserDto change(Integer id, User user);
+    UserDto change(Integer id, UserDto userDto);
 
     UserDto deleteById(Integer id);
 }

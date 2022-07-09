@@ -39,27 +39,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto add(User user) {
-        validateEmail(user);
-        return UserMapper.toUserDto(userRepository.add(user));
+    public UserDto add(UserDto userDto) {
+        validateEmail(userDto);
+        return UserMapper.toUserDto(userRepository.add(UserMapper.toUser(userDto)));
     }
 
     @Override
-    public UserDto change(Integer id, User user) {
+    public UserDto change(Integer id, UserDto userDto) {
         if (!userRepository.getRepository().containsKey(id)) {
             log.warn("Пользователь с идентификатором {} не найден.", id);
             throw new UserNotFoundException("Пользователь с id " + id + " не найден");
         }
-        validateEmail(user);
-        user.setId(id);
+        validateEmail(userDto);
+        userDto.setId(id);
         User oldUser = userRepository.getRepository().get(id);
-        if (user.getName() == null) {
-            user.setName(oldUser.getName());
+        if (userDto.getName() == null) {
+            userDto.setName(oldUser.getName());
         }
-        if (user.getEmail() == null) {
-            user.setEmail(oldUser.getEmail());
+        if (userDto.getEmail() == null) {
+            userDto.setEmail(oldUser.getEmail());
         }
-        return UserMapper.toUserDto(userRepository.change(user));
+        return UserMapper.toUserDto(userRepository.change(UserMapper.toUser(userDto)));
     }
 
     @Override
@@ -71,11 +71,11 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(userRepository.deleteById(id));
     }
 
-    private void validateEmail(User user) {
+    private void validateEmail(UserDto userDto) {
         for (User u : userRepository.getRepository().values()) {
-            if (u.getEmail().equals(user.getEmail()) && !u.getId().equals(user.getId())) {
+            if (u.getEmail().equals(userDto.getEmail()) && !u.getId().equals(userDto.getId())) {
                 log.warn("Дубликат email");
-                throw new UserValidationException("Пользователь с " + user.getEmail() + " уже существует");
+                throw new UserValidationException("Пользователь с " + userDto.getEmail() + " уже существует");
             }
         }
     }
