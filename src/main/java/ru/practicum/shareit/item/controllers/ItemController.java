@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.сontrollers;
+package ru.practicum.shareit.item.controllers;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
