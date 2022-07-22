@@ -23,30 +23,33 @@ public class UserController {
     @GetMapping
     @ResponseStatus(OK)
     public List<UserDto> findAll() {
+        log.debug("Вернуть список всех пользователей.");
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(OK)
     public UserDto findById(@PathVariable(value = "id") Integer id) {
+        log.debug("Найти пользователя {}.", id);
         return userService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
     public UserDto add(@Valid @RequestBody UserDto userDto) {
+        log.debug("Создание пользователя {}.", userDto.getName());
         return userService.add(userDto);
     }
 
     @PatchMapping("/{id}")
     public UserDto change(@PathVariable(value = "id") Integer id, @RequestBody UserDto userDto) {
-        log.debug("Изменение пользователя : \n{}", userDto.getId());
+        log.debug("Изменение пользователя {}.", userDto.getId());
         return userService.change(id, userDto);
     }
 
     @DeleteMapping("/{id}")
     public UserDto deleteById(@PathVariable(value = "id") Integer id) {
-        log.debug("Удаление пользователя {}", id);
+        log.debug("Удаление пользователя {}.", id);
         return userService.deleteById(id);
     }
 

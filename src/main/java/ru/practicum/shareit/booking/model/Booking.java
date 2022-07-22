@@ -1,24 +1,40 @@
 package ru.practicum.shareit.booking.model;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDate;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "bookings")
+@Getter
+@Setter
 public class Booking {
-    private Integer id;
-    private LocalDate start;
-    private LocalDate end;
-    private Integer item;
-    private Integer booker;
-    private Status status;
 
-    public Booking(Integer id, LocalDate start, LocalDate end, Integer item, Integer booker, Status status) {
-        this.id = id;
-        this.start = start;
-        this.end = end;
-        this.item = item;
-        this.booker = booker;
-        this.status = status;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+    @Column(name = "start_date_time")
+    private LocalDateTime start;
+    @Column(name = "end_date_time")
+    private LocalDateTime end;
+    @ManyToOne()
+    @JoinColumn(name = "item_id")
+    private Item item;
+    @ManyToOne()
+    @JoinColumn(name = "booker_id")
+    private User booker;
+    @Column(name = "approved")
+    private Boolean isApproved;
+    @Column(name = "canceled")
+    private Boolean isCanceled;
+
 }
