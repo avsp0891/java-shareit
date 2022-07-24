@@ -9,14 +9,21 @@ import javax.validation.constraints.NotNull;
 public class ItemMapper {
 
     public static ItemDto toItemDto(@NotNull Item item) {
-        return new ItemDto(
-                item.getId(),
+        Integer requestId;
+        if (item.getRequest() != null) {
+            requestId = item.getRequest().getId();
+        } else
+            requestId = null;
+        return new ItemDto(item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                item.getOwner(),
-                item.getRequest()
-        );
+                new ItemDto.User(item.getOwner().getId(),
+                        item.getOwner().getName()),
+                requestId,
+                null,
+                null,
+                null);
     }
 
     public static Item toItem(@NotNull ItemDto itemDto) {
@@ -25,8 +32,8 @@ public class ItemMapper {
                 itemDto.getName(),
                 itemDto.getDescription(),
                 itemDto.getAvailable(),
-                itemDto.getOwner(),
-                itemDto.getRequest()
+                null,
+                null
         );
     }
 }

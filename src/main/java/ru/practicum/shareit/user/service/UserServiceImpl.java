@@ -6,77 +6,68 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.exceptions.UserNotFoundException;
-import ru.practicum.shareit.user.exceptions.UserValidationException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
 
     @Override
     public List<UserDto> findAll() {
-        List<UserDto> list = new ArrayList<>();
-        for (User user : userRepository.findAll()) {
-            list.add(UserMapper.toUserDto(user));
-        }
-        return list;
+        log.info("Вернуть список всех пользователей.");
+        return UserMapper.toUserDtoList(repository.findAll());
     }
 
     @Override
     public UserDto findById(Integer id) {
-        if (!userRepository.getRepository().containsKey(id)) {
-            log.warn("Пользователь с идентификатором {} не найден.", id);
-            throw new UserNotFoundException("Пользователь с id " + id + " не найден");
-        }
-        return UserMapper.toUserDto(userRepository.findById(id));
+        log.info("Найти пользователя по id {}.", id);
+        User user = findUserOrException(id);
+        return UserMapper.toUserDto(user);
     }
 
     @Override
     public UserDto add(UserDto userDto) {
-        validateEmail(userDto);
-        return UserMapper.toUserDto(userRepository.add(UserMapper.toUser(userDto)));
+        log.info("Добавление пользователя c id {}.", userDto.getId());
+        User user = repository.save(UserMapper.toUser(userDto));
+        return UserMapper.toUserDto(user);
     }
 
     @Override
     public UserDto change(Integer id, UserDto userDto) {
-        if (!userRepository.getRepository().containsKey(id)) {
-            log.warn("Пользователь с идентификатором {} не найден.", id);
-            throw new UserNotFoundException("Пользователь с id " + id + " не найден");
+        log.info("Изменение пользователя c id {}.", id);
+        User oldUser = findUserOrException(id);
+        User newUser = UserMapper.toUser(userDto);
+        if (newUser.getName() != null) {
+            oldUser.setName(newUser.getName());
         }
-        validateEmail(userDto);
-        userDto.setId(id);
-        User oldUser = userRepository.getRepository().get(id);
-        if (userDto.getName() == null) {
-            userDto.setName(oldUser.getName());
+        if (newUser.getEmail() != null) {
+            oldUser.setEmail(newUser.getEmail());
         }
-        if (userDto.getEmail() == null) {
-            userDto.setEmail(oldUser.getEmail());
-        }
-        return UserMapper.toUserDto(userRepository.change(UserMapper.toUser(userDto)));
+        return UserMapper.toUserDto(repository.save(oldUser));
     }
 
     @Override
     public UserDto deleteById(Integer id) {
-        if (!userRepository.getRepository().containsKey(id)) {
-            log.warn("Пользователь с идентификатором {} не найден.", id);
-            throw new UserNotFoundException("Пользователь с id " + id + " не найден");
-        }
-        return UserMapper.toUserDto(userRepository.deleteById(id));
+        log.info("Удаление пользователя c id {}.", id);
+        UserDto user = findById(id);
+        repository.deleteById(id);
+        return user;
     }
 
-    private void validateEmail(UserDto userDto) {
-        for (User u : userRepository.getRepository().values()) {
-            if (u.getEmail().equals(userDto.getEmail()) && !u.getId().equals(userDto.getId())) {
-                log.warn("Дубликат email");
-                throw new UserValidationException("Пользователь с " + userDto.getEmail() + " уже существует");
-            }
+    @Override
+    public User findUserOrException(Integer id) {
+        Optional<User> user = repository.findById(id);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("Пользователь с id " + id + " не найден.");
+        } else {
+            return user.get();
         }
     }
 }
